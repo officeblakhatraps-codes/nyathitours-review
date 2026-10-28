@@ -1,0 +1,4 @@
+Options -Indexes
+<Files "nyathi-config.php">
+  Require all denied
+</Files>

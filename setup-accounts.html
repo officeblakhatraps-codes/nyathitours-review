@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="robots" content="noindex,nofollow"/>
+  <title>First-time account setup · Nyathi Tours</title>
+  <style>
+    :root{font-family:Arial,sans-serif;color:#14233d;background:#f4f0e7}*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:20px}.card{width:min(100%,540px);background:#fffdf8;border:1px solid #d9d4ca;padding:30px;box-shadow:10px 10px #1c61c2}h1{font:500 34px Georgia,serif;margin:0 0 10px}.note{font-size:13px;line-height:1.6;color:#58616d}.form{display:grid;gap:12px;margin-top:22px}label{font-size:12px;font-weight:700;display:grid;gap:5px}input{border:1px solid #c9c8c3;background:white;padding:11px;font:14px Arial,sans-serif;color:#14233d}button{padding:13px;background:#14233d;color:white;border:0;font-weight:bold;cursor:pointer}.feedback{min-height:20px;font-size:13px;color:#b52d25}.warning{background:#fff4d7;border-left:4px solid #e5ad3c;padding:12px;font-size:12px;line-height:1.5}
+  </style>
+</head>
+<body>
+  <main class="card"><h1>Set up the two Nyathi Tours accounts</h1><p class="note">Use this one-time page over HTTPS after importing the database. Create one owner account and one CTO account. Passwords must be at least 14 characters.</p><p class="warning">Keep this page private during setup. The installer key and both passwords are sent to your own website. After setup succeeds, clear the installer key from the server config and delete this page.</p>
+    <form class="form" id="setupForm"><label>One-time installer key<input name="installer_key" type="password" autocomplete="off" required minlength="40"/></label><label>Owner email<input name="owner_email" type="email" required/></label><label>Owner password<input name="owner_password" type="password" autocomplete="new-password" required minlength="14"/></label><label>CTO email<input name="cto_email" type="email" required/></label><label>CTO password<input name="cto_password" type="password" autocomplete="new-password" required minlength="14"/></label><button type="submit">Create both accounts</button><div class="feedback" id="feedback" role="status" aria-live="polite"></div></form>
+  </main>
+  <script>
+    const form=document.querySelector('#setupForm'),feedback=document.querySelector('#feedback');
+    form.addEventListener('submit',async event=>{event.preventDefault();feedback.textContent='Creating the two accounts…';const data=Object.fromEntries(new FormData(form));try{const response=await fetch('nyathi-api.php?action=initialize',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});const result=await response.json();if(!response.ok||!result.ok)throw new Error(result.error||'Setup did not complete.');feedback.textContent=result.message;form.reset()}catch(error){feedback.textContent=error.message||'Could not reach the setup service.'}});
+  </script>
+</body>
+</html>
